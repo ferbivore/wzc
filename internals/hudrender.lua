@@ -35,5 +35,21 @@ function hudrender.tooltip:unset()
   hudrender.tooltip.active = false
 end
 
+-- main functions, to be called from love.*
+function hudrender:load()
+  hudrender.crosshair:load()
+end
+function hudrender:draw()
+  hudrender.crosshair:draw()
+  hudrender.tooltip:draw()
+end
+
+
+-- module metadata
+hudrender.MODULE_DEPS = { "internals/textbox" }
+hudrender.MODULE_HOOKS = {
+  ["love.load"] = hudrender.load,
+  ["love.draw"] = hudrender.draw
+}
 
 return hudrender

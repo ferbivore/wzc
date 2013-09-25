@@ -57,6 +57,7 @@ function maprender:draw()
   --  first, to the center of the screen (sw/2, sh/2)
   --  then, to the starting position of the map (-(mw/2), -(mh/2))
   -- then draw map at (0,0) and revert coordinate system
+  -- (this will draw the map centered on the screen)
   love.graphics.push()
   love.graphics.translate(sw/2, sh/2)
   love.graphics.translate(-(mw/2), -(mh/2))
