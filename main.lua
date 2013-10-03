@@ -28,6 +28,7 @@ end
 function love.update(dt)
   -- modules
   waiter:run()
+  maprender.pan:update()
   comms:update()
 end
 
@@ -40,6 +41,20 @@ function love.draw()
   hudrender.crosshair:draw()
   -- testing
   hudrender.tooltip:draw()
+end
+
+function love.mousepressed(x, y, button)
+  -- map panning
+  if button == "r" then
+    maprender.pan:start(x, y)
+  end
+end
+
+function love.mousereleased(x, y, button)
+  -- map panning
+  if button == "r" then
+    maprender.pan:stop()
+  end
 end
 
 -- TODO LIST:

@@ -1,9 +1,9 @@
 -- renders the game map and all objects on it (with correct panning and scaling)
 maprender = {}
 
--- variables (current map and drawable map)
+-- variables
 maprender.map  = nil
-maprender.dmap = nil
+maprender.pan = { active=false, ix=0, iy=0, x=0, y=0 }
 
 -- test map
 maprender.TESTMAP = {
@@ -29,12 +29,8 @@ maprender.TESTMAP = {
 -- load a map (todo: formally define map format) and generate drawable map
 function maprender:loadmap(map)
   maprender.map = map
-  --maprender.dmap = {
-  --  width  = map.geometry.width,
-  --  height = map.geometry.height,
-  --  x      = map.geometry.width/2,
-  --  y      = map.geometry.height/2,
-  --}
+  maprender.pan.x = 0
+  maprender.pan.y = 0
 end
 
 -- draw a given map at (0,0)
@@ -49,23 +45,44 @@ end
 -- draw the current map centered on the screen (wraps drawmap())
 function maprender:draw()
   local map = maprender.map
+  local pan = maprender.pan
   local sw = screen.width
   local sh = screen.height
   local mw = map.geometry.width
   local mh = map.geometry.height
   -- save, then translate coordinate system:
   --  first, to the center of the screen (sw/2, sh/2)
-  --  then, to the starting position of the map (-(mw/2), -(mh/2))
+  --  then, to the starting position of the map (-(mw/2)+pan.x, -(mh/2)+pan.y)
   -- then draw map at (0,0) and revert coordinate system
   -- (this will draw the map centered on the screen)
   love.graphics.push()
   love.graphics.translate(sw/2, sh/2)
-  love.graphics.translate(-(mw/2), -(mh/2))
+  love.graphics.translate(-(mw/2)+pan.x, -(mh/2)+pan.y)
     maprender:drawmap(map)
   love.graphics.pop()
 end
 
+function maprender.pan:start(x,y)
+  -- I'm not really sure how to comment this...
+  -- basically, we set a starting point for the pan delta calculation
+  -- (mouse coords, minus current pan delta)
+  maprender.pan.ix = x - maprender.pan.x
+  maprender.pan.iy = y - maprender.pan.y
+  maprender.pan.active = true
+end
 
+function maprender.pan:stop()
+  maprender.pan.active = false
+end
+
+function maprender.pan:update()
+  if maprender.pan.active then
+    -- set the new pan delta (mouse coords, minus starting point for delta calculation)
+    -- this effectively moves the starting position for the map draw (see maprender:draw())
+    maprender.pan.x = love.mouse.getX() - maprender.pan.ix
+    maprender.pan.y = love.mouse.getY() - maprender.pan.iy
+  end
+end
 
 -- module metadata
 maprender.MODULE_DEPS = { "internals/proprender" }
