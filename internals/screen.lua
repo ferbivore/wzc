@@ -2,15 +2,13 @@
 screen = {}
 
 -- configuration variables (can be overriden)
-screen.width      = 1280
-screen.height     = 768
-screen.fullscreen = false
-screen.vsync      = false -- vsync makes it laggier
-screen.msaa       = 0
+screen.width  = 800
+screen.height = 600
+screen.flags  = {}
 
 -- (re)initializes the graphics display
 function screen:init()
-  love.graphics.setMode(screen.width, screen.height, screen.fullscreen, screen.vsync, screen.msaa)
+  love.window.setMode(screen.width, screen.height, screen.flags)
 end
 
 -- module metadata

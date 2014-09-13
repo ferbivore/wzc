@@ -12,7 +12,7 @@ hudrender = require "internals/hudrender"
 
 function love.load()
   -- pre-module-load configuration
-  love.graphics.setCaption("Warzone Command "..VER) -- will be deprecated in love 0.9.0
+  love.window.setTitle("Warzone Command "..VER) -- will be deprecated in love 0.9.0
   default_font = love.graphics.newFont(14)
   -- modules
   screen:init()
