@@ -1,20 +1,17 @@
 VER = "0.2.1"
 
 -- loads modules and overrides love's main callback functions
-screen    = require "internals/screen"
-waiter    = require "internals/waiter"
-textbox   = require "internals/textbox"
-comms     = require "internals/comms"
-maprender = require "internals/maprender"
-hudrender = require "internals/hudrender"
+hook    = require "hook"
+screen  = require "internals/screen"
+waiter  = require "internals/waiter"
+fonts   = require "internals/fonts"
+textbox = require "internals/textbox"
+hud     = require "internals/hud/hud"
+map     = require "internals/map/map"
 
 function love.load()
-  -- window title and default font
-  love.window.setTitle("Warzone Command "..VER)
-  default_font = love.graphics.newFont(14)
-  -- module load functions
-  screen:load()
-  hudrender.crosshair:load()
+  -- hooks
+  hook:run("load")
   -- testing
   maprender:loadmap(maprender.TESTMAP)
   waiter:add(function() comms:add("WZC version "..VER.." loaded.", comms.DEBUG) end, 0)
@@ -23,21 +20,17 @@ function love.load()
 end
 
 function love.update(dt)
-  -- module update functions
-  waiter:run()
-  maprender.pan:update()
-  comms:update()
+  -- hooks
+  hook:run("update", dt)
 end
 
 function love.draw()
-  -- pre-module-load configuration
-  love.graphics.setFont(default_font)
-  -- module draw functions
-  maprender:draw()
-  comms:draw()
-  hudrender.crosshair:draw()
-  -- testing
-  hudrender.tooltip:draw()
+  -- hooks
+  hook:run("draw-2")
+  hook:run("draw-1")
+  hook:run("draw")
+  hook:run("draw+1")
+  hook:run("draw+2")
 end
 
 function love.mousepressed(x, y, button)

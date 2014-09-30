@@ -1,5 +1,5 @@
-proprender = require "internals/proprender"
-hudrender  = require "internals/hudrender"
+hud   = require "internals/hud/hud"
+props = require "internals/map/props"
 
 -- renders the game map and all objects on it (with correct panning and scaling)
 maprender = {}
@@ -44,7 +44,7 @@ function maprender:drawmap(map)
   love.graphics.setColor(230, 230, 230)
   love.graphics.rectangle("fill", 0, 0, mw, mh)
   -- draw props
-  proprender:drawprops(map, mw, mh)
+  props:drawprops(map, mw, mh)
 end
 
 -- draw the current map centered on the screen (wraps drawmap())
@@ -67,23 +67,6 @@ function maprender:draw()
   love.graphics.pop()
 end
 
-function maprender.pan:start(x,y)
-  -- I'm not really sure how to comment this...
-  -- basically, we set a starting point for the pan delta calculation
-  -- (mouse coords, minus current pan delta)
-  maprender.pan.ix = x - maprender.pan.x
-  maprender.pan.iy = y - maprender.pan.y
-  maprender.pan.active = true
-  -- change the crosshairs color when panning
-  hudrender.crosshair:setColor("magenta")
-end
-
-function maprender.pan:stop()
-  maprender.pan.active = false
-  -- change the crosshairs color back
-  hudrender.crosshair:setColor(hudrender.default_color)
-end
-
 function maprender.pan:update()
   if maprender.pan.active then
     -- set the new pan delta (mouse coords, minus starting point for delta calculation)
@@ -93,9 +76,28 @@ function maprender.pan:update()
   end
 end
 
--- module metadata
-maprender.MODULE_DEPS = { "internals/proprender" }
-maprender.MODULE_HOOKS = {
-}
+function maprender.pan:start(x,y)
+  -- I'm not really sure how to comment this...
+  -- basically, we set a starting point for the pan delta calculation
+  -- (mouse coords, minus current pan delta)
+  maprender.pan.ix = x - maprender.pan.x
+  maprender.pan.iy = y - maprender.pan.y
+  maprender.pan.active = true
+  -- change the crosshairs color when panning
+  hud.crosshair:setColor("magenta")
+  -- add a hook for the update function
+  hook:add("update", maprender.pan.update)
+end
 
+function maprender.pan:stop()
+  maprender.pan.active = false
+  -- change the crosshairs color back
+  hud.crosshair:setColor(hud.default_color)
+  -- remove the update function's hook
+  hook:remove("update", maprender.pan.update)
+end
+
+-- add hooks and return module
+hook:add("load", maprender.loadmap)
+hook:add("draw", maprender.draw)
 return maprender

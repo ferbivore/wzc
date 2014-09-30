@@ -5,10 +5,14 @@ screen = {}
 screen.width  = 800
 screen.height = 600
 screen.flags  = {}
+screen.title  = "Warzone Command " .. VER
 
 -- (re)initializes the graphics display
 function screen:load()
   love.window.setMode(screen.width, screen.height, screen.flags)
+  love.window.setTitle(screen.title)
 end
 
+-- add hooks and return module
+hook:add("load", screen.load)
 return screen

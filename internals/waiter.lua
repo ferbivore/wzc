@@ -21,4 +21,6 @@ function waiter:run()
   end
 end
 
+-- add hooks and return module
+hook:add("update", waiter.run)
 return waiter
