@@ -4,14 +4,14 @@ WZC is intended to be a top-down, fairly realistic military simulator. Which is 
 
 Right now (after 2 days of development), this is the feature list:
 * doesn't crash
-* code is fairly organized (day 2 was Refactoring Day)
+* code is fairly organized
 * can display text in boxes
 * can display a blank slate and claim it's a map
+* can pan the map around
 
-The following features should be added in a couple of days:
-* panning the map around
+The following features should be added in a couple of years:
 * displaying objects on the map (units, buildings)
-* mouse selection of objects
+* keyboard selection of objects
 
 There's a long-term to-do list at the end of main.lua.
 
