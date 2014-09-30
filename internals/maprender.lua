@@ -1,3 +1,6 @@
+proprender = require "internals/proprender"
+hudrender  = require "internals/hudrender"
+
 -- renders the game map and all objects on it (with correct panning and scaling)
 maprender = {}
 
@@ -40,6 +43,8 @@ function maprender:drawmap(map)
   -- draw the light gray map square
   love.graphics.setColor(230, 230, 230)
   love.graphics.rectangle("fill", 0, 0, mw, mh)
+  -- draw props
+  proprender:drawprops(map, mw, mh)
 end
 
 -- draw the current map centered on the screen (wraps drawmap())
@@ -58,7 +63,7 @@ function maprender:draw()
   love.graphics.push()
   love.graphics.translate(sw/2, sh/2)
   love.graphics.translate(-(mw/2)+pan.x, -(mh/2)+pan.y)
-    maprender:drawmap(map)
+  maprender:drawmap(map)
   love.graphics.pop()
 end
 
@@ -69,10 +74,14 @@ function maprender.pan:start(x,y)
   maprender.pan.ix = x - maprender.pan.x
   maprender.pan.iy = y - maprender.pan.y
   maprender.pan.active = true
+  -- change the crosshairs color when panning
+  hudrender.crosshair:setColor("magenta")
 end
 
 function maprender.pan:stop()
   maprender.pan.active = false
+  -- change the crosshairs color back
+  hudrender.crosshair:setColor(hudrender.default_color)
 end
 
 function maprender.pan:update()

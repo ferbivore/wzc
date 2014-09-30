@@ -21,9 +21,4 @@ function waiter:run()
   end
 end
 
--- module metadata
-waiter.MODULE_HOOKS = {
-  ["love.update"] = waiter.run,
-}
-
 return waiter

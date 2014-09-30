@@ -1,8 +1,6 @@
-VER = "0.2.0"
-CHANGELOG = "Refactored and modularized everything."
+VER = "0.2.1"
 
--- loads modules and exposes love's main callback functions
-
+-- loads modules and overrides love's main callback functions
 screen    = require "internals/screen"
 waiter    = require "internals/waiter"
 textbox   = require "internals/textbox"
@@ -11,22 +9,21 @@ maprender = require "internals/maprender"
 hudrender = require "internals/hudrender"
 
 function love.load()
-  -- pre-module-load configuration
-  love.window.setTitle("Warzone Command "..VER) -- will be deprecated in love 0.9.0
+  -- window title and default font
+  love.window.setTitle("Warzone Command "..VER)
   default_font = love.graphics.newFont(14)
-  -- modules
-  screen:init()
+  -- module load functions
+  screen:load()
   hudrender.crosshair:load()
-  waiter:add(function() comms:add("WZC version "..VER.." loaded.", comms.DEBUG) end, 0)
   -- testing
   maprender:loadmap(maprender.TESTMAP)
+  waiter:add(function() comms:add("WZC version "..VER.." loaded.", comms.DEBUG) end, 0)
   waiter:add(function() comms:add("ALPHA-1 REPORTING IN, GRID 552466") end, 3)
   waiter:add(function() comms:add("BASE TO ALPHA-1, 10-4", comms.BASE) end, 5)
-  hudrender.tooltip:set("ALPHA-1 [OFFICER]")
 end
 
 function love.update(dt)
-  -- modules
+  -- module update functions
   waiter:run()
   maprender.pan:update()
   comms:update()
@@ -35,7 +32,7 @@ end
 function love.draw()
   -- pre-module-load configuration
   love.graphics.setFont(default_font)
-  -- modules
+  -- module draw functions
   maprender:draw()
   comms:draw()
   hudrender.crosshair:draw()
@@ -60,7 +57,7 @@ end
 -- TODO LIST:
 --  game state data storage
 --  [DONE] map rendering
---  map panning
+--  [DONE] map panning
 --  map zoom on cursor
 --  mouse input
 --  keyboard input

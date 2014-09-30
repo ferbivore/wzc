@@ -7,13 +7,8 @@ screen.height = 600
 screen.flags  = {}
 
 -- (re)initializes the graphics display
-function screen:init()
+function screen:load()
   love.window.setMode(screen.width, screen.height, screen.flags)
 end
-
--- module metadata
-screen.MODULE_HOOKS = {
-  ["love.load"] = screen.init
-}
 
 return screen

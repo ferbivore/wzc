@@ -1,6 +1,17 @@
+textbox = require "internals/textbox"
+
 -- HUD element rendering - tooltips, crosshairs, selectors, etc.
 -- (comms section handled by internals/comms independently)
 hudrender = {}
+
+-- crosshair colours
+hudrender.colors = {
+  green   = { 50, 200, 50 },
+  red     = { 180, 0, 0 },
+  magenta = { 200, 100, 200 }
+}
+hudrender.default_color = "green"
+hudrender.color = hudrender.colors[hudrender.default_color]
 
 -- crosshair - acts as mouse cursor
 hudrender.crosshair = {}
@@ -10,11 +21,16 @@ function hudrender.crosshair:load()
 end
 -- draws crosshair
 function hudrender.crosshair:draw()
-  love.graphics.setColor(50, 200, 50)
+  love.graphics.setColor(hudrender.color)
   love.graphics.setLineWidth(1)
   local x, y = love.mouse.getPosition()
   love.graphics.line(x, y-30, x, y+30)
   love.graphics.line(x-30, y, x+30, y)
+end
+
+-- color
+function hudrender.crosshair:setColor(colorstring)
+  hudrender.color = hudrender.colors[colorstring]
 end
 
 -- tooltip - always under mouse cursor, only one per screen
@@ -44,12 +60,5 @@ function hudrender:draw()
   hudrender.tooltip:draw()
 end
 
-
--- module metadata
-hudrender.MODULE_DEPS = { "internals/textbox" }
-hudrender.MODULE_HOOKS = {
-  ["love.load"] = hudrender.load,
-  ["love.draw"] = hudrender.draw
-}
 
 return hudrender
