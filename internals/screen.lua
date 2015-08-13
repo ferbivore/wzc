@@ -13,6 +13,4 @@ function screen:load()
   love.window.setTitle(screen.title)
 end
 
--- add hooks and return module
-hook:add("load", screen.load)
 return screen

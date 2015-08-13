@@ -9,6 +9,4 @@ function fonts:use(id)
 	love.graphics.setFont(fonts[id])
 end
 
-hook:add("load", fonts.load)
-hook:add("draw-2", fonts.use)
 return fonts

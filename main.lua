@@ -1,4 +1,4 @@
-VER = "0.2.1"
+VER = "0.2.2"
 
 -- loads modules and overrides love's main callback functions
 hook    = require "hook"
@@ -10,8 +10,9 @@ hud     = require "internals/hud/hud"
 map     = require "internals/map/map"
 
 function love.load()
-  -- hooks
-  hook:run("load")
+  screen:load()
+  fonts:load()
+  hud:load()
   -- testing
   maprender:loadmap(maprender.TESTMAP)
   waiter:add(function() comms:add("WZC version "..VER.." loaded.", comms.DEBUG) end, 0)
@@ -20,17 +21,15 @@ function love.load()
 end
 
 function love.update(dt)
-  -- hooks
-  hook:run("update", dt)
+  hud:update()
+  maprender.pan:update()
+  waiter:run()
 end
 
 function love.draw()
-  -- hooks
-  hook:run("draw-2")
-  hook:run("draw-1")
-  hook:run("draw")
-  hook:run("draw+1")
-  hook:run("draw+2")
+  fonts:use()
+  maprender:draw()
+  hud:draw()
 end
 
 function love.mousepressed(x, y, button)

@@ -85,19 +85,12 @@ function maprender.pan:start(x,y)
   maprender.pan.active = true
   -- change the crosshairs color when panning
   hud.crosshair:setColor("magenta")
-  -- add a hook for the update function
-  hook:add("update", maprender.pan.update)
 end
 
 function maprender.pan:stop()
   maprender.pan.active = false
   -- change the crosshairs color back
   hud.crosshair:setColor(hud.default_color)
-  -- remove the update function's hook
-  hook:remove("update", maprender.pan.update)
 end
 
--- add hooks and return module
-hook:add("load", maprender.loadmap)
-hook:add("draw", maprender.draw)
 return maprender

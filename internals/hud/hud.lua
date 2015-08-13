@@ -65,8 +65,4 @@ function hud:update()
   comms:update()
 end
 
--- add hooks and return module
-hook:add("load", hud.load)
-hook:add("draw+1", hud.draw)
-hook:add("update", comms.update)
 return hud

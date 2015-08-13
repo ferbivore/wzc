@@ -6,4 +6,5 @@ function props:drawprops(map, mw, mh)
   
 end
 
+-- return module
 return props
