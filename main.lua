@@ -1,7 +1,6 @@
 VER = "0.2.2"
 
 -- loads modules and overrides love's main callback functions
-hook    = require "hook"
 screen  = require "internals/screen"
 waiter  = require "internals/waiter"
 fonts   = require "internals/fonts"
